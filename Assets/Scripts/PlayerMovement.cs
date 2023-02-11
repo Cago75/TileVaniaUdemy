@@ -10,14 +10,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float velocity     = 10f;
     [SerializeField] float jumpSpeed    = 10f;
     [SerializeField] float climbSpeeds  = 10f;
+                     float gravityScale = 7.98f;
     Animator animator;
     CapsuleCollider2D capsuleCollider;
 
     void Start()
     {
-        rigidBody   = GetComponent<Rigidbody2D>();
-        animator    = GetComponent<Animator>();
-        capsuleCollider    = GetComponent<CapsuleCollider2D>();
+        rigidBody           = GetComponent<Rigidbody2D>();
+        animator            = GetComponent<Animator>();
+        capsuleCollider     = GetComponent<CapsuleCollider2D>();
+        gravityScale        = rigidBody.gravityScale;
     }
 
     void Update()
@@ -39,8 +41,8 @@ public class PlayerMovement : MonoBehaviour
         Vector2 playerVelocity = new Vector2(moveInput.x * velocity, rigidBody.velocity.y);
         rigidBody.velocity = playerVelocity;
 
-        bool playerHorizontalSpeed = Mathf.Abs(rigidBody.velocity.x) > Mathf.Epsilon; 
-        bool playerVerticalSpeed = Mathf.Abs(rigidBody.velocity.y) > 0.1; 
+        bool playerHorizontalSpeed  = Mathf.Abs(rigidBody.velocity.x) > Mathf.Epsilon; 
+        bool playerVerticalSpeed    = Mathf.Abs(rigidBody.velocity.y) > 0.1; 
         animator.SetBool("isJumping", (playerVerticalSpeed));
         animator.SetBool("isRunning", playerHorizontalSpeed&&!playerVerticalSpeed);        
     }
@@ -60,11 +62,16 @@ public class PlayerMovement : MonoBehaviour
     void ClimbLadder()
     {
         if (!capsuleCollider.IsTouchingLayers(LayerMask.GetMask("Climbing")))
-        {return;}
+        {
+            rigidBody.gravityScale  = gravityScale;
+            animator.SetBool("isClimbing", false); 
+            return;
+        }
 
-        Vector2 ClimbVelocity = new Vector2(rigidBody.velocity.x, moveInput.y * climbSpeeds);
-        rigidBody.velocity = ClimbVelocity;
-        
+        Vector2 ClimbVelocity   = new Vector2(rigidBody.velocity.x, moveInput.y * climbSpeeds);
+        rigidBody.velocity      = ClimbVelocity;  
+        rigidBody.gravityScale  = 0f;
+        animator.SetBool("isClimbing", true); 
 
 
     }
