@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float climbSpeeds  = 10f;
                      float gravityScale = 7.98f;
     [SerializeField] Vector2 deathKick  = new Vector2(20f,20f);
+    [SerializeField] GameObject bullet;
+    [SerializeField] Transform gun;
     Animator animator;
     CapsuleCollider2D   bodyCollider;
     BoxCollider2D       feetCollider;
@@ -41,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if(!isAlive){return;}
         moveInput = value.Get<Vector2>();
-        Debug.Log(moveInput);
+
     }
 
     void Run()
@@ -104,6 +106,10 @@ public class PlayerMovement : MonoBehaviour
             rigidBody.velocity = deathKick;     
         }
     }
-
+    void OnFire(InputValue value)
+    {
+        if(!isAlive){return;}
+        Instantiate(bullet, gun.position, transform.rotation);
+    }
 
 }
