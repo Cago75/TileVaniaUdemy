@@ -11,26 +11,35 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpSpeed    = 10f;
     [SerializeField] float climbSpeeds  = 10f;
                      float gravityScale = 7.98f;
+    [SerializeField] Vector2 deathKick  = new Vector2(20f,20f);
     Animator animator;
-    CapsuleCollider2D capsuleCollider;
+    CapsuleCollider2D   bodyCollider;
+    BoxCollider2D       feetCollider;
+    //PlayerInput         playerInput;
+    bool isAlive = true;
 
     void Start()
     {
         rigidBody           = GetComponent<Rigidbody2D>();
         animator            = GetComponent<Animator>();
-        capsuleCollider     = GetComponent<CapsuleCollider2D>();
+        bodyCollider        = GetComponent<CapsuleCollider2D>();
+        feetCollider        = GetComponent<BoxCollider2D>();
+        //playerInput         = GetComponent<PlayerInput>();
         gravityScale        = rigidBody.gravityScale;
     }
 
     void Update()
     {
+        if(!isAlive){return;}
         Run();
         ClimbLadder();
         FlipSprite();
+        Die();
     }
 
     void OnMove(InputValue value)
     {
+        if(!isAlive){return;}
         moveInput = value.Get<Vector2>();
         Debug.Log(moveInput);
     }
@@ -48,8 +57,9 @@ public class PlayerMovement : MonoBehaviour
     }
     void OnJump(InputValue value)
     {
+        if(!isAlive){return;}
         //bool playerVerticalSpeed = Mathf.Abs(rigidBody.velocity.y) > Mathf.Epsilon; 
-        if (!capsuleCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        if (!feetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {return;}
         
         if(value.isPressed)
@@ -61,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void ClimbLadder()
     {
-        if (!capsuleCollider.IsTouchingLayers(LayerMask.GetMask("Climbing")))
+        if (!feetCollider.IsTouchingLayers(LayerMask.GetMask("Climbing")))
         {
             rigidBody.gravityScale  = gravityScale;
             animator.SetBool("isClimbing", false); 
@@ -84,6 +94,15 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector2(Mathf.Sign(rigidBody.velocity.x), 1f);
         } 
                
+    }
+    void Die()
+    {
+        if(bodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemies","Hazards")))
+        {
+            isAlive    = false;  
+            animator.SetTrigger("Dying"); 
+            rigidBody.velocity = deathKick;     
+        }
     }
 
 
