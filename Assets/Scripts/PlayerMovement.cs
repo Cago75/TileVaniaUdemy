@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     CapsuleCollider2D   bodyCollider;
     BoxCollider2D       feetCollider;
     //PlayerInput         playerInput;
-    bool isAlive = true;
+    public bool isAlive = true;
 
     void Start()
     {
