@@ -49,7 +49,7 @@ GameObject:
   - component: {fileID: 406742384}
   m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -129,7 +129,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1337382917
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 3
   m_Sprite: {fileID: -6367560908665664636, guid: d348dff3819df794186a80cb95777629, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -253,3 +253,4 @@ MonoBehaviour:
   deathKick: {x: 20, y: 20}
   bullet: {fileID: 3075967700867864249, guid: 94616476befb9654e8515a2ec9f59082, type: 3}
   gun: {fileID: 2176792979905193494}
+  isAlive: 1

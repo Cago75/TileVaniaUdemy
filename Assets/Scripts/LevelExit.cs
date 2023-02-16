@@ -14,7 +14,7 @@ public class LevelExit : MonoBehaviour
         isAlive = player.GetComponent<PlayerMovement>().isAlive;
         //Debug.Log(player.GetComponent<PlayerMovement>().isAlive);
         //ensure that the player is alive before allowing them to move to the next level
-        if(isAlive)
+        if(isAlive && other.tag == "Player")
         {
             StartCoroutine(LoadNextLevel());
         }

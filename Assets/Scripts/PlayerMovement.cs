@@ -97,6 +97,7 @@ public class PlayerMovement : MonoBehaviour
         } 
                
     }
+
     void Die()
     {
         if(bodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemies","Hazards")))
@@ -104,8 +105,10 @@ public class PlayerMovement : MonoBehaviour
             isAlive    = false;  
             animator.SetTrigger("Dying"); 
             rigidBody.velocity = deathKick;     
+            FindObjectOfType<GameSession>().ProcessPlayerDeath();
         }
     }
+
     void OnFire(InputValue value)
     {
         if(!isAlive){return;}
